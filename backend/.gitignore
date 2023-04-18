@@ -1,0 +1,18 @@
+# 3rd-party dependencies
+node_modules
+package-lock.json
+
+# Logs
+logs/*
+*.log
+
+# Settings and Configurations
+.env
+.idea
+
+# Other
+.DS_Store
+
+# Coverage report data
+/.nyc_output/
+/coverage/

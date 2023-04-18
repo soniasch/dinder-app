@@ -1,4 +1,5 @@
 module.exports = {
   demo: require('./demo'),
-  health: require('./health')
+  health: require('./health'),
+  dog: require('./dog')
 }

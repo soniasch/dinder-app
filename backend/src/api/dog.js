@@ -4,22 +4,25 @@ const config = require('../../config')
 
 module.exports = {
   index: (req, res) => {
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-    const name = characters.charAt(Math.floor(Math.random() * characters.length));
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const letter = characters.charAt(Math.floor(Math.random() * characters.length));
 
-    axios.get(`https://api.api-ninjas.com/v1/dogs?name=${name}`, {
+    axios.get(`https://api.api-ninjas.com/v1/dogs`, {
       headers: {
         'X-Api-Key': config.API_NINJA_KEY
       },
       params: {
-        offset: Math.floor(Math.random())
+        name: letter,
+        offset: Math.floor(Math.random() * 5)
       }
     })
       .then(({ data }) => {
         console.log(data);
+        const randomDogNumber = Math.floor(Math.random() * data.length)
+        
         res.status(200).json({
-          name: dogNames.allRandom(),
-          dog: data[Math.floor(Math.random() * 20)]
+          dog: formatDog(data[randomDogNumber]),
+          originalDog: data[randomDogNumber]
         })
       })
       .catch((error) => {
@@ -32,4 +35,15 @@ module.exports = {
       });
   }
 }
-  
+
+function formatDog (dog) {
+  const gender = ['male', 'female'][Math.floor(Math.random() * 2)];
+  return {
+    breed: dog.name,
+    name: dogNames[`${gender}Random`](),
+    gender,
+    age: Math.floor(Math.random() * dog.max_life_expectancy),
+    height: Math.floor(Math.random() * (dog[`max_height_${gender}`] - dog[`min_height_${gender}`])) + dog[`min_height_${gender}`],
+    weigth: Math.floor(Math.random() * (dog[`max_height_${gender}`] - dog[`min_height_${gender}`])) + dog[`min_height_${gender}`],
+  }
+}

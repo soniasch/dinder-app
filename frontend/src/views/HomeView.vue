@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import TheWelcome from '../components/TheWelcome.vue'
+
 </script>
 
 <template>
   <main>
-    <TheWelcome />
+    <h1>Welcome to Dinder</h1>
+    Bark up the tree with us!
+    <RouterLink to="/about">Start</RouterLink>
   </main>
 </template>

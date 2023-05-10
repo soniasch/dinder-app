@@ -1,9 +1,12 @@
 const dogNames = require("dog-names");
 const axios = require("axios");
+const { Configuration, OpenAIApi } = require("openai");
 const config = require("../../config");
 
 module.exports = {
   index: (req, res) => {
+    console.log("config.OPENAI_API_KEY", config.OPENAI_API_KEY);
+
     const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     const letter = characters.charAt(
       Math.floor(Math.random() * characters.length)
@@ -24,7 +27,22 @@ module.exports = {
         const randomDogNumber = Math.floor(Math.random() * data.length);
         const chosenDog = data[randomDogNumber];
 
-        res.status(200).json(formatDog(chosenDog));
+        const configuration = new Configuration({
+          apiKey: config.OPENAI_API_KEY,
+        });
+
+        const openai = new OpenAIApi(configuration);
+
+        const response = openai
+          .createCompletion({
+            model: "text-ada-001",
+            prompt: "Say this is a test",
+            max_tokens: 7,
+            temperature: 0,
+          })
+          .then((responses) => {
+            res.status(200).json(formatDog(chosenDog), response);
+          });
       })
       .catch((error) => {
         // handle error

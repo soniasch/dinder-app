@@ -5,8 +5,6 @@ const config = require("../../config");
 
 module.exports = {
   index: async (req, res) => {
-    console.log("config.OPENAI_API_KEY", config.OPENAI_API_KEY);
-
     const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     const letter = characters.charAt(
       Math.floor(Math.random() * characters.length)
@@ -25,8 +23,6 @@ module.exports = {
 
       const randomDogNumber = Math.floor(Math.random() * data.length);
       const chosenDog = formatDog(data[randomDogNumber]);
-
-      console.log("chosenDog", chosenDog);
 
       const configuration = new Configuration({
         apiKey: config.OPENAI_API_KEY,

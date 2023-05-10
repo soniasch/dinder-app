@@ -1,4 +1,6 @@
 {
   "env": "test",
-  "port": 3000
+  "port": 3000,
+  "API_NINJA_KEY": "",
+  "OPENAI_API_KEY": ""
 }

@@ -4,7 +4,7 @@ const { Configuration, OpenAIApi } = require("openai");
 const config = require("../../config");
 
 module.exports = {
-  index: (req, res) => {
+  index: async (req, res) => {
     console.log("config.OPENAI_API_KEY", config.OPENAI_API_KEY);
 
     const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -12,8 +12,8 @@ module.exports = {
       Math.floor(Math.random() * characters.length)
     );
 
-    axios
-      .get(`https://api.api-ninjas.com/v1/dogs`, {
+    try {
+      const { data } = await axios.get(`https://api.api-ninjas.com/v1/dogs`, {
         headers: {
           "X-Api-Key": config.API_NINJA_KEY,
         },
@@ -21,37 +21,45 @@ module.exports = {
           name: letter,
           offset: Math.floor(Math.random() * 5),
         },
-      })
-      .then(({ data }) => {
-        console.log(data);
-        const randomDogNumber = Math.floor(Math.random() * data.length);
-        const chosenDog = data[randomDogNumber];
-
-        const configuration = new Configuration({
-          apiKey: config.OPENAI_API_KEY,
-        });
-
-        const openai = new OpenAIApi(configuration);
-
-        const response = openai
-          .createCompletion({
-            model: "text-ada-001",
-            prompt: "Say this is a test",
-            max_tokens: 7,
-            temperature: 0,
-          })
-          .then((responses) => {
-            res.status(200).json(formatDog(chosenDog), response);
-          });
-      })
-      .catch((error) => {
-        // handle error
-        console.log(error);
-        res.status(500).json({
-          code: "InternalError",
-          message: "Internal error occurred",
-        });
       });
+
+      const randomDogNumber = Math.floor(Math.random() * data.length);
+      const chosenDog = formatDog(data[randomDogNumber]);
+
+      console.log("chosenDog", chosenDog);
+
+      const configuration = new Configuration({
+        apiKey: config.OPENAI_API_KEY,
+      });
+      const openai = new OpenAIApi(configuration);
+
+      try {
+        const openaiResponse = await openai.createCompletion({
+          model: "text-ada-001",
+          prompt: `Generate a short tinder-like description of this dog, try to keep it short, 1 to 3 sentences short. Be as creative as possible.
+          the scores if between 0 - 5, where 0 is the lowest and 5 is the highest. ${JSON.stringify(
+            chosenDog
+          )}`,
+          max_tokens: 204,
+          temperature: 0.5,
+        });
+
+        res.status(200).json({
+          ...chosenDog,
+          description: openaiResponse.data.choices[0].text,
+        });
+      } catch (e) {
+        console.error("e", e);
+        res.status(200).json({ chosenDog, description: "null" });
+      }
+    } catch (e) {
+      // handle error
+      console.log(error);
+      res.status(500).json({
+        code: "InternalError",
+        message: "Internal error occurred",
+      });
+    }
   },
 };
 

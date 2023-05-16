@@ -11,8 +11,8 @@ export default defineConfig({
     preprocessorOptions: {
       scss: {
         additionalData: `
-          @import "./src/styles/_mq.scss";
-          @import "./src/styles/style.scss";
+          @import "./src/assets/_mq.scss";
+          @import "./src/assets/app";
         `
       }
     }

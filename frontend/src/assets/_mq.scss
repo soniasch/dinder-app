@@ -4,8 +4,10 @@
 
 /// Custom colors with their function to get them
 $colors: (
+  'background': #F2E3DB,
+  'start-button': #D77A34,
   'primary': #5cdb95,
-  'secondary': #05386b,
+  'secondary': #41644A,
   'alternative': #edf5e1,
   'light': #8ee4af,
   'dark': #379683,
@@ -331,7 +333,7 @@ $media-type: all !default;
 ///  @include show-breakpoints((L, XL), (S: 300px, L: 800px, XL: 1200px));
 @mixin show-breakpoints($show-breakpoints: $show-breakpoints, $breakpoints: $breakpoints) {
   body:before {
-    background-color: #fcf8e3;
+    background-color: #F2E3DB;
     border-bottom: 1px solid #fbeed5;
     border-left: 1px solid #fbeed5;
     color: #c09853;

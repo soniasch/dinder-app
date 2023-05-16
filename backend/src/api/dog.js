@@ -31,11 +31,12 @@ module.exports = {
 
       try {
         const openaiResponse = await openai.createCompletion({
-          model: "text-ada-001",
-          prompt: `Generate a short tinder-like description of this dog, try to keep it short, 1 to 3 sentences short. Be as creative as possible.
-          the scores if between 0 - 5, where 0 is the lowest and 5 is the highest. ${JSON.stringify(
-            chosenDog
-          )}`,
+          model: "text-davinci-002",
+          prompt: `Generate a short tinder-like description of this dog, try to keep it short, 1 to 3 sentences short.
+            Be as creative as possible and use puns when possible.
+            The scores is between 0 and 5, where 0 is the lowest and 5 is the highest, expect for age, height and weight. Use the score to describe the dog. ${JSON.stringify(
+              chosenDog
+            )}`,
           max_tokens: 204,
           temperature: 0.5,
         });
@@ -50,7 +51,7 @@ module.exports = {
       }
     } catch (e) {
       // handle error
-      console.log(error);
+      console.log(e);
       res.status(500).json({
         code: "InternalError",
         message: "Internal error occurred",

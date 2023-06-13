@@ -1,24 +1,37 @@
-<script lang="ts">
-import { callGetDogs } from '@/index';
-import { onBeforeMount } from 'vue';
-
-export default {
-  callGetDogs
-}
-
+<script lang="ts" setup>
+import { useDogStore } from '@/stores/dogs'
+const useDog = useDogStore()
+useDog.callGetDogs()
 </script>
 
 <template>
   <div class="container">
     <div class="border">
       <div class="content">
-        <p v-if="dog">Name: {{ dog.breed }}</p>
-        <p>Breed: </p>
-        <p>Age: </p>
-        <p>Hobbies: </p>
-        <p>Good with children: </p>
-        <p>Barking: </p>
-        <p>Energy: </p>
+        <p v-if="useDog.dog.name">
+          Name: <span class="text">{{ useDog.dog.name }}</span>
+        </p>
+        <p v-if="useDog.dog.breed">
+          Breed: <span class="text">{{ useDog.dog.breed }}</span>
+        </p>
+        <p v-if="useDog.dog.age">
+          Age: <span class="text">{{ useDog.dog.age }}</span>
+        </p>
+        <p v-if="useDog.dog.description">
+          Description: <span class="text">{{ useDog.dog.description }}</span>
+        </p>
+        <p class="icons" v-if="useDog.dog.goodWithChildren">
+          Good with children:
+          <img v-for="kind in useDog.dog.goodWithChildren" :key="kind" src="@/assets/paw.svg" />
+        </p>
+        <p class="icons" v-if="useDog.dog.barking">
+          Barking:
+          <img v-for="bark in useDog.dog.barking" :key="bark" src="@/assets/bark.svg" />
+        </p>
+        <p class="icons">
+          Energy:
+          <img v-for="energy in useDog.dog.energy" :key="energy" src="@/assets/energy.svg" />
+        </p>
       </div>
     </div>
     <div class="button-block">
@@ -30,9 +43,19 @@ export default {
 
 <style scoped lang="scss">
 p {
-  color: #263A29;
+  color: #263a29;
   font-size: larger;
   font-weight: bold;
+}
+
+img {
+  margin: 2px;
+}
+
+.text {
+  color: #263a29;
+  font-size: large;
+  font-weight: 200;
 }
 .container {
   margin: auto;
@@ -40,6 +63,11 @@ p {
   display: flex;
   flex-flow: column;
   width: 90%;
+}
+
+.icons {
+  display: flex;
+  align-items: center;
 }
 
 .content {
@@ -52,8 +80,8 @@ p {
   font-size: xx-large;
   border-radius: 10px;
   margin-top: 1rem;
-  color: #E84637;
-  border-color: #E84637; 
+  color: #e84637;
+  border-color: #e84637;
   border-style: solid;
 }
 .voff-button {
@@ -74,5 +102,4 @@ p {
   display: flex;
   justify-content: space-between;
 }
-  
 </style>

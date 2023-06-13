@@ -1,17 +1,19 @@
-const express = require('express')
-const packageJson = require('../package.json')
+const express = require("express");
+const cors = require("cors");
+const packageJson = require("../package.json");
 
-const routes = require('./routes')
-const config = require('../config')
+const routes = require("./routes");
+const config = require("../config");
 
-const app = express()
+const app = express();
 
-app.locals.config = config
+app.use(cors());
+app.locals.config = config;
 
-app.enable('trust proxy')
-app.disable('x-powered-by')
+app.enable("trust proxy");
+app.disable("x-powered-by");
 
-app.use(express.json())
-app.use(routes)
+app.use(express.json());
+app.use(routes);
 
-module.exports = app
+module.exports = app;
